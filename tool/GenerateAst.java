@@ -1,5 +1,6 @@
 package tool;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -15,11 +16,16 @@ public class GenerateAst {
         String outputDir = args[0];
 
         defineAst(outputDir, "Expr", Arrays.asList(
-                "Binary : Expr left, Token operator, Expr right",
-                "Grouping : Expr expression",
-                "Literal : Object value",
-                "Unary : Token operator, Expr right"));
+                "Binary    : Expr left, Token operator, Expr right",
+                "Grouping       : Expr expression",
+                "Literal        : Object value",
+                "Unary          : Token operator, Expr right",
+                "Variable       : Token name"));
 
+        defineAst(outputDir, "Stmt", Arrays.asList(
+                "Expression : Expr expression",
+                "Print           : Expr expression",
+                "Var             : Token name, Expr initializer"));
     }
 
     private static void defineAst(
@@ -27,11 +33,11 @@ public class GenerateAst {
         String path = outputDir + "/" + baseName + ".java";
         PrintWriter writer = new PrintWriter(path, "UTF-8");
 
-        writer.println("package lox;");
+        writer.println("package jlox;");
         writer.println();
         writer.println("import java.util.List;");
         writer.println();
-        writer.println("abstract class" + baseName + " {");
+        writer.println("abstract class " + baseName + " {");
 
         defineVisitor(writer, baseName, types);
 
@@ -42,9 +48,9 @@ public class GenerateAst {
             defineType(writer, baseName, className, fields);
         }
 
-        // The base accpet() method.
+        // The base accept() method.
         writer.println();
-        writer.println("   abstract <R> R accpet(Visitor<R> visitor);");
+        writer.println("   abstract <R> R accept(Visitor<R> visitor);");
 
         writer.println("}");
         writer.close();
@@ -71,7 +77,7 @@ public class GenerateAst {
         writer.println("  static class " + className + " extends " + baseName + " {");
 
         // Constructor
-        writer.println("    " + className + "(" + fieldList);
+        writer.println("    " + className + "(" + fieldList + ") {");
 
         // Store parameters in fields.
         String[] fields = fieldList.split(", ");
@@ -85,7 +91,7 @@ public class GenerateAst {
 
         writer.println();
         writer.println("    @Override");
-        writer.println("    <R> R accpet(Visitor<R> visitor) {");
+        writer.println("    <R> R accept(Visitor<R> visitor) {");
         writer.println("    return visitor.visit" + className + baseName + "(this);");
         writer.println("    }");
 
