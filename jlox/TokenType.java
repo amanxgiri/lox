@@ -1,4 +1,4 @@
-package lox.jlox;
+package jlox;
 
 enum TokenType {
 
