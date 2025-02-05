@@ -1,17 +1,5 @@
 package jlox;
 
-import static jlox.TokenType.BANG;
-import static jlox.TokenType.BANG_EQUAL;
-import static jlox.TokenType.EQUAL_EQUAL;
-import static jlox.TokenType.GREATER;
-import static jlox.TokenType.GREATER_EQUAL;
-import static jlox.TokenType.LESS;
-import static jlox.TokenType.LESS_EQUAL;
-import static jlox.TokenType.MINUS;
-import static jlox.TokenType.PLUS;
-import static jlox.TokenType.SLASH;
-import static jlox.TokenType.STAR;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

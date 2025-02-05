@@ -197,25 +197,25 @@ public class Parser {
 
     }
 
-    private Stmt.Function function(String kind){
-        Token name = consume(IDENTIFIER, "Expect " + kind +" name.")
-        
+    private Stmt.Function function(String kind) {
+        Token name = consume(IDENTIFIER, "Expect " + kind + " name.");
+
         consume(LEFT_PAREN, "Expect '(' after" + kind + " name.");
         List<Token> parameters = new ArrayList<>();
-        
-        if(!check(RIGHT_PAREN)){
-            do{
-                if(parameters.size() >= 255){
-                    error(peek(),"Can't have more than 255 parameters.");
+
+        if (!check(RIGHT_PAREN)) {
+            do {
+                if (parameters.size() >= 255) {
+                    error(peek(), "Can't have more than 255 parameters.");
                 }
 
-            parameters.add(consume(IDENTIFIER, "Expect parameter name."));
-            }while(match(COMMA));
-            
+                parameters.add(consume(IDENTIFIER, "Expect parameter name."));
+            } while (match(COMMA));
+
         }
         consume(RIGHT_PAREN, "Expect ')' after parameters.");
-        consume(LEFT_BRACE, "Expect '{' before "+ kind + " body.");
-        
+        consume(LEFT_BRACE, "Expect '{' before " + kind + " body.");
+
         List<Stmt> body = block();
         return new Stmt.Function(name, parameters, body);
     }
@@ -263,15 +263,15 @@ public class Parser {
         return expr;
     }
 
-    private Expr and(){
+    private Expr and() {
         Expr expr = equality();
-        
+
         while (match(AND)) {
             Token operator = previous();
             Expr right = equality();
-            expr = new Expr.Logical(expr, operator, right)
+            expr = new Expr.Logical(expr, operator, right);
         }
-        
+
         return expr;
     }
 
@@ -387,6 +387,8 @@ public class Parser {
             Token keyword = previous();
             consume(DOT, "Expect '.' after 'super'.");
             Token method = consume(IDENTIFIER, "Expect superclass method name.");
+
+            return new Expr.Super(keyword, method);
         }
         if (match(THIS)) {
             return new Expr.This(previous());
