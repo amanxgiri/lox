@@ -12,11 +12,17 @@ public class Parser {
     }
 
     private final List<Token> tokens;
+    private final boolean allowIncomplete;
     private int current = 0;
 
     // Constructor
     Parser(List<Token> tokens) {
+        this(tokens, false);
+    }
+
+    Parser(List<Token> tokens, boolean allowIncomplete) {
         this.tokens = tokens;
+        this.allowIncomplete = allowIncomplete;
     }
 
     List<Stmt> parse() {
@@ -43,6 +49,7 @@ public class Parser {
             if (match(VAR)) {
                 return varDeclaration();
             }
+            return statement();
         } catch (ParseError error) {
             synchronize();
             return null;
@@ -454,6 +461,9 @@ public class Parser {
     }
 
     private ParseError error(Token token, String message) {
+        if (allowIncomplete && token.type == EOF && !Lox.hadError) {
+            throw new IncompleteInput();
+        }
         Lox.error(token, message);
         return new ParseError();
     }

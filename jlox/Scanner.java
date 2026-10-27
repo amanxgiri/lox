@@ -15,6 +15,7 @@ class Scanner {
         keywords.put("and", AND);
         keywords.put("class", CLASS);
         keywords.put("else", ELSE);
+        keywords.put("false", FALSE);
         keywords.put("for", FOR);
         keywords.put("fun", FUN);
         keywords.put("if", IF);
@@ -30,13 +31,19 @@ class Scanner {
     }
 
     private final String source;
+    private final boolean allowIncomplete;
     private final List<Token> tokens = new ArrayList<>();
     private int start = 0;
     private int current = 0;
     private int line = 1;
 
     Scanner(String source) {
+        this(source, false);
+    }
+
+    Scanner(String source, boolean allowIncomplete) {
         this.source = source;
+        this.allowIncomplete = allowIncomplete;
     }
 
     List<Token> scanTokens() {
@@ -85,7 +92,7 @@ class Scanner {
                 addToken(STAR);
                 break;
             case '!':
-                addToken(match('=') ? BANG_EQUAL : EQUAL);
+                addToken(match('=') ? BANG_EQUAL : BANG);
                 break;
             case '=':
                 addToken(match('=') ? EQUAL_EQUAL : EQUAL);
@@ -120,11 +127,6 @@ class Scanner {
                 string();
                 break;
 
-            case 'o':
-                if (match('r')) {
-                    addToken(OR);
-                }
-                break;
             default:
                 if (isDigit(c)) {
                     number();
@@ -175,6 +177,9 @@ class Scanner {
         }
 
         if (isAtEnd()) {
+            if (allowIncomplete && !Lox.hadError) {
+                throw new IncompleteInput();
+            }
             Lox.error(line, "Unterminated String.");
             return;
         }

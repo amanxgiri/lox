@@ -1,4 +1,6 @@
 {
+    "java.project.outputPath": "build/classes",
+    "java.project.referencedLibraries": ["build/lib/*.jar"],
     "files.associations": {
         "chunk.h": "c",
         "memory.h": "c",

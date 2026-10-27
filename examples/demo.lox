@@ -1,0 +1,50 @@
+// Run with: .\run.ps1 examples/demo.lox
+print "=== Lox interpreter demo ===";
+
+print "Arithmetic and booleans:";
+print (1 + 2) * 3;
+print !false and ("lox" == "lox");
+print nil or "fallback";
+
+print "Fibonacci (recursion and a for loop):";
+fun fib(n) {
+  if (n <= 1) return n;
+  return fib(n - 1) + fib(n - 2);
+}
+for (var i = 0; i < 8; i = i + 1) {
+  print fib(i);
+}
+
+print "Closures retain their state:";
+fun makeCounter() {
+  var count = 0;
+  fun next() {
+    count = count + 1;
+    return count;
+  }
+  return next;
+}
+var counter = makeCounter();
+print counter();
+print counter();
+
+print "Classes, inheritance, and bound methods:";
+class Greeter {
+  init(name) {
+    this.name = name;
+  }
+  greet() {
+    return "Hello, " + this.name;
+  }
+}
+class EnthusiasticGreeter < Greeter {
+  greet() {
+    return super.greet() + "!";
+  }
+}
+var greeter = EnthusiasticGreeter("Lox");
+var greet = greeter.greet;
+print greet();
+greeter.name = "everyone";
+print greeter.greet();
+print "=== Demo complete ===";

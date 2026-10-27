@@ -1,8 +1,9 @@
 package tool;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,10 +11,11 @@ public class GenerateAst {
     public static void main(String[] args) throws IOException {
 
         if (args.length != 1) {
-            System.err.println("Usage: generate_ast<output directory>");
+            System.err.println("Usage: generate_ast <output directory>");
             System.exit(64);
         }
         String outputDir = args[0];
+        Files.createDirectories(Paths.get(outputDir));
 
         defineAst(outputDir, "Expr", Arrays.asList(
                 "Assign    : Token name, Expr value",
@@ -24,7 +26,7 @@ public class GenerateAst {
                 "Literal        : Object value",
                 "Logical        : Expr left, Token operator, Expr right",
                 "Set            : Expr object, Token name, Expr value",
-                "Super          : Token keyword , Token method",
+                "Super          : Token keyword, Token method",
                 "This           : Token keyword",
                 "Unary          : Token operator, Expr right",
                 "Variable       : Token name"));

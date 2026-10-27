@@ -1,6 +1,5 @@
 package jlox;
 
-import java.lang.classfile.instruction.StackInstruction;
 import java.util.HashMap;
 import java.util.Map;
 

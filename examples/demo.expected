@@ -1,0 +1,21 @@
+=== Lox interpreter demo ===
+Arithmetic and booleans:
+9
+true
+fallback
+Fibonacci (recursion and a for loop):
+0
+1
+1
+2
+3
+5
+8
+13
+Closures retain their state:
+1
+2
+Classes, inheritance, and bound methods:
+Hello, Lox!
+Hello, everyone!
+=== Demo complete ===
